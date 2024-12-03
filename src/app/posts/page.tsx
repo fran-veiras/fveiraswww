@@ -6,7 +6,7 @@ export default async function Posts() {
   const posts = await fetchPages();
 
   return (
-    <div className="m-auto my-14 flex w-full flex-col gap-4 2xl:w-1/2">
+    <div className="m-auto my-14 flex w-full flex-col gap-4 md:w-1/2 2xl:w-1/2">
       <Link href={"/"}>
         <div>
           <p className="text-sm transition-all hover:!text-gray-200">

@@ -4,6 +4,7 @@ import { NotionRenderer } from "@notion-render/client";
 
 import hljsPlugin from "@notion-render/hljs-plugin";
 import { type Metadata } from "next";
+import { unstable_cache } from "next/cache";
 import Link from "next/link";
 
 import { notFound } from "next/navigation";
@@ -44,12 +45,22 @@ export async function generateMetadata(props: {
   };
 }
 
+const getPost = unstable_cache(
+  async (slug: string) => {
+    const post = await fetchPageBySlug(slug);
+
+    return { post };
+  },
+  ["blogpost"],
+  { revalidate: 60, tags: ["blogpost"] },
+);
+
 export default async function Page(props: {
   params: Promise<{ slug: string }>;
 }) {
   const slug = (await props?.params)?.slug ?? "";
 
-  const post = await fetchPageBySlug(slug);
+  const { post } = await getPost(slug);
 
   if (!post) notFound();
 
@@ -67,7 +78,7 @@ export default async function Page(props: {
   const formattedDate = date.toDateString();
 
   return (
-    <div className="m-auto my-14 flex w-full flex-col 2xl:w-1/2">
+    <div className="m-auto my-14 flex w-full flex-col md:w-1/2 2xl:w-1/2">
       <Link href={"/posts"}>
         <p className="text-sm transition-all hover:!text-gray-200">
           ⟵ Back to posts
