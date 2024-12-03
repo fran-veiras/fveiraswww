@@ -5,8 +5,6 @@ import { fetchPages } from "~/lib/notion";
 export default async function Posts() {
   const posts = await fetchPages();
 
-  console.log(posts);
-
   return (
     <div className="m-auto my-14 flex w-full flex-col gap-4 2xl:w-1/2">
       <Link href={"/"}>

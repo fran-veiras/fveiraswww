@@ -44,8 +44,12 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const post = await fetchPageBySlug(params.slug);
+export default async function Page(props: {
+  params: Promise<{ slug: string }>;
+}) {
+  const slug = (await props?.params)?.slug ?? "";
+
+  const post = await fetchPageBySlug(slug);
 
   if (!post) notFound();
 
